@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Company Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> 
+
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"> </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src = "script.js"></script>
+      
+      <style>
+            
+            *{
+                font-family: 'Poppins',sans-serif;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            :root{
+                --body-color: #E4E9F7;
+                --sidebar-color:#FFF;
+                --primary-color: #695CFE;
+                --primary-color-light: #F6F5FF;
+                --toggle-color: #DDD;
+                --text-color: #707070;
+                
+                --tran-02: all 0.2s ease;
+                --tran-03: all 0.3s ease ;
+                --tran-04: all 0.4s ease;
+                --tran-05: all 0.5s ease;
+            }
+            body{
+                height: 100px;
+                background: var(--body-color);
+                transition: var(--trans-04)
+            }
+            body.dark{
+                --body-color: #18191A;
+                --sidebar-color:#242526;
+                --primary-color: #3A3B3C;
+                --primary-color-light: #3A3B3C;
+                --toggle-color: #FFF;
+                --text-color: #CCC;
+            }
+            /*===== Sidebar=====*/
+            .sidebar{
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 250px;
+                padding:10px 14px;
+                background: var(--sidebar-color);
+                transition: var(--trans-05);
+                z-index: 100;
+            }
+            .sidebar.close{
+                width: 84px;
+            }
+            .sidebar .text{
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--text-color);
+                transition: var(--trans-03);
+                white-space: nowrap;
+                opacity: 1;
+            }
+            .sidebar.close .text{
+                opacity: 0;
+            }
+            .sidebar .image{
+                min-width: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .sidebar li{
+                height: 50px;
+                margin-top: 10px;
+                list-style: none;
+                display: flex;
+                align-items: center;
+                
+            }
+            .sidebar li .icon{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width:  60px;
+                font-size: 20px;
+            }
+            .sidebar li .icon,
+            .sidebar li .text{
+                color: var(--text-color);
+                transition: var(--trans-02);
+            }
+            .sidebar header{
+                position: relative;
+            }
+            .sidebar .image-text img{
+                width: 100px;
+                border-radius: 6px;
+            }
+            .sidebar header .image-text{
+                display: flex;
+                align-items: center;
+                
+            }
+            header .image-text .header-text{
+                display: flex;
+                flex-direction: column;
+            }
+            .header-text .name{
+                font-weight: 600;
+            }
+            .header-text .profession{
+                margin-top: -2px;
+            }
+            .sidebar header .toggle{
+                position: absolute;
+                top: 70px;
+                right: -15px;
+                transform: translateY(-50%) rotate(180deg);
+                height: 25px;
+                weight: 25px;
+                background: var(--primary-color);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                color: var(--sidebar-color);
+                font-size: 22px;
+                transition: var(--trans-04);
+            }
+            .sidebar.close header .toggle{
+                transform: translateY(-50%);
+            }
+            body.dark .sidebar header .toggle{
+                color: var(--text-color);
+            }
+            .sidebar .menu{
+                margin-top: 35px;
+            }
+            .sidebar li a{
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                border-radius: 6px;
+                transition: var(--tran-04);
+            }
+            .sidebar li a:hover{
+                background: var(--primary-color);
+            }
+            body.dark .sidebar li a:hover .icon,
+            body.dark .sidebar li a:hover .text{
+                color: var(--text-color);
+            }
+            .sidebar li a:hover .icon,
+            .sidebar li a:hover .text{
+                color: var(--sidebar-color);
+            }
+            .sidebar .menu-bar{
+                height: calc(100% - 50px);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                
+            }
+            /*== Dark MOde==*/
+            .menu-bar .mode{
+                position: relative;
+                border-radius: 6px;
+                background: var(--primary-color-light);
+            }
+            .menu-bar .mode .moon-sun{
+                height: 50px;
+                width: 60px;
+                display: flex;
+                align-items: center;
+                
+            }
+            .menu-bar .mode i{
+                position: absolute;
+                transition: var(--trans-03);
+            }
+            .menu-bar .mode i.sun{
+                opacity: 0;
+            }
+            body.dark .menu-bar .mode i.sun{
+                opacity: 1;
+            }
+            body.dark .menu-bar .mode i.moon{
+                opacity: 0;
+            }
+            .menu-bar .mode .toggle-switch{
+                position: absolute;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                min-width: 60px;
+                cursor: pointer;
+                border-radius: 6px;
+                background: var(--primary-color-light);
+                transition: var(--trans-05);
+            }
+            .toggle-switch .switch{
+                position: relative;
+                height: 22px;
+                width: 40px;
+                border-radius: 25px;
+                background: var(--toggle-color);
+                transition: var(--trans-05);
+            }
+            .switch::before{
+                content: '';
+                position: absolute;
+                height: 15px;
+                width: 15px;
+                border-radius: 50%;
+                top: 50%;
+                left: 5px;
+                transform: translateY(-50%);
+                background: var(--sidebar-color);
+                transition: var(--trans-03);
+            }
+            body.dark .switch::before{
+                left: 24px;
+            }
+            
+            /*=========*/
+            .home{
+                position: relative;
+                height: 100vh;
+                left: 250px;
+                width: calc(100% - 250px);
+                background: var(--body-color);;
+                transition: var(--trans-05);
+            }
+            .home .text{
+                padding-top: 20px;
+                font-size: 30px;
+                font-weight: 500;
+                color: var(--text-color);
+                text-align: center;
+            }
+            .home .about{
+                font-size: 20px;
+                font-weight: 500;
+                color: var(--text-color);
+                padding: 8px 50px;
+            }
+            .home .container2{
+                font-size: 20px;
+                font-weight: 500;
+                color: var(--text-color);
+                padding: 8px 50px;
+            }
+            .sidebar.close ~ .home{
+                left: 88px;
+                width: calc(100% - 88px);
+            }
+            .container2 {
+                position: absolute;
+                left: 400px;
+                border-radius: 5px;
+                text-align: center;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 600px;
+                height: 950px;
+                padding-top: 120px;
+            }
+            .primary-button2 {
+                background: var(--primary-color);
+                width: 300px;
+                height: 50px;
+                text-align: center;
+                font-size: 15px;
+                border-radius: none;
+      
+            }
+            .primary-button2:hover {
+                background-color: #ccc;
+            }
+            
+            .contain5{
+       border: solid 0.5px lightskyblue;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+        text-align: center;
+        width: 1200px;
+       height: 1200px;
+    }
+    .line2{
+        border-top: 0.5px solid lightskyblue; /* Black line on top */
+      width: 400px; /* Full width */
+      height: 0px; /* No height (creates a line) */
+      margin: 10px auto; /* Center and add margin */
+    }
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+header p {
+    font-size: 1.2em;
+    color: #777;
+}
+
+section {
+    position: relative;
+    top: 50px;
+    left: 40px;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
+section h2 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+}
+section .summary{
+    position: relative;
+    left: 120px;
+}
+section .application-stats{
+    position: relative;
+    left: 120px;
+}
+section .applicant-breakdown{
+    position: relative;
+    left: 120px;
+}
+section .future-actions{
+    position: relative;
+    left: 120px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+td{
+    text-align: center;
+}
+
+th {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #4a42c0;
+}
+#job-applications {
+            margin: 20px auto;
+            max-width: 800px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #job-applications h2 {
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            margin: 0;
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            max-height: 400px; /* Adjust as needed */
+            overflow-y: auto;
+
+        }
+
+        .application {
+            border-bottom: 1px solid #ddd;
+            padding: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .application:hover {
+            background-color: #f9f9f9;
+        }
+
+        .application:last-child {
+            border-bottom: none;
+        }
+
+        .application p {
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        .application .company {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #4CAF50;
+        }
+
+        .application .position {
+            color: #555;
+        }
+
+        .application .date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .application .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .status.Applied {
+    background-color: #ffc107; /* Yellow */
+}
+
+.status.Interviewed {
+    background-color: #17a2b8; /* Cyan */
+}
+
+.status.Rejected {
+    background-color: #dc3545; /* Red */
+}
+
+.status.Hired {
+    background-color: #28a745; /* Green */
+}
+
+.upload-container {
+        display: flex;
+        justify-content: start;
+        margin-top: 20px; /* Adjust margin as needed */
+        margin-left: 120px; 
+    }
+
+    #imageUpload {
+        background-color:  #695CFE; /* Use your primary color */
+        color: black;
+        padding: 10px 30px; /* Adjust padding to make the button longer */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 25px;
+        transition: background-color 0.3s ease;
+        width: 100%; /* Make the button full width of its container */
+        max-width: 1100px; /* Set a maximum width if needed */
+        text-align: center; /* Center align text */
+    }
+
+    #imageUpload:hover {
+        background-color: #4a42c0; /* Darken or adjust hover color */
+    }
+
+
+
+        </style>
+    </head>
+    <body>
+        <nav class="sidebar close">
+            <header>
+                <div class = "image-text">
+                    <span class ="image">
+                        <a href="summary.html"><a href="summary.html"><img src="cvBot Logo.png" alt="logo"></a> 
+                    </span>
+                    
+                    
+                </div>
+                 
+                <i class='bx bxs-chevron-right toggle' ></i>
+            </header>
+            
+            <div class="menu-bar">
+                <div class="menu">
+                    <ul class="menu-links">
+                        <li class="nav-link">
+                            <a href ="company_loggedIn.html">
+                                <i class='bx bx-home icon'></i>
+                                <span class="text nav-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href ="addJob.html">
+                                <i class='bx bx-plus icon'></i>
+                                <span class="text nav-text">Add Job</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href ="processJobs.html">
+                                <i class='bx bx-briefcase icon'></i>
+                                <span class="text nav-text">Jobs</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href ="#">
+                                <i class='bx bxs-group icon'></i>
+                                <span class="text nav-text">Candidates</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href ="#">
+                                <i class='bx bx-calendar-alt icon'></i>
+                                <span class="text nav-text">Interview</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href ="analyrics.html">
+                                <i class='bx bx-align-right bx-rotate-90 icon'></i>
+                                <span class="text nav-text">Analytics</span>
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a href ="summary.html">
+                                <i class='bx bx-book-open icon'></i>
+                                <span class="text nav-text">Summary</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class ="bottom-content">
+                    <li class="">
+                        <a href ="summary.html">
+                            <i class='bx bx-log-out icon'></i>
+                            <span class="text nav-text">Logout</span>
+                        </a>
+                    </li>
+                    <li class="mode">
+                        <div class="moon-sun">
+                            <i class='bx bx-moon icon moon'></i>
+                            <i class='bx bx-sun icon sun'></i>
+                        </div>
+                        <span class ="mode-text text">Dark mode</span>
+                        
+                        <div class="toggle-switch">
+                            <span class ="switch"></span>
+                        </div>
+                    </li>
+                    
+                </div>
+            </div>
+        </nav>
+        <div id="invoice">
+        <section class ="home">
+            <header>
+                <h1>Job Application Summary Report</h1>
+                <p>Date: <span id="report-date"></span></p>
+            </header>
+            <section class="summary">
+                <h2>Application Summary</h2>
+                <h4>This report provides an overview of the applications received  <strong id="compNa"></strong> company.</h4>
+            </section>
+            <section class="application-stats">
+                <h2>Application Statistics</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Number of Applications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Applications</td>
+                            <td id="total"></td>
+                        </tr>
+                        <tr>
+                            <td>Qualified Applications</td>
+                            <td id="qualified"></td>
+                        </tr>
+                        <tr>
+                            <td>Under Review</td>
+                            <td id="underReview"></td>
+                        </tr>
+                        <tr>
+                            <td>Rejected Applications</td>
+                            <td id="rejected"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class="applicant-breakdown">
+                <h2>Applicant Breakdown</h2>
+                <ul>
+                    <li><strong>By Education Level:</strong> 40% Bachelor’s, 50% Master’s, 10% PhD</li>
+                    <li><strong>By Experience:</strong> 60% 0-3 years, 30% 3-5 years, 10% 5+ years</li>
+                    <li><strong>By Location:</strong> 50% Local, 30% National, 20% International</li>
+                </ul>
+            </section>
+            <section class="future-actions">
+                <h2>Future Actions</h2>
+                <p>Plans for interviews, further screening, and selection processes will be outlined here.</p>
+            </section>
+           
+            <br>
+            <br>
+            <div class="upload-container">
+                <input type="submit" id="imageUpload" onclick="generatePDF()" value="DOWNLOAD SUMMARY REPORT">
+                
+            </div>
+        </section>
+    </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ 
+        <script>
+        document.getElementById('report-date').textContent = new Date().toLocaleDateString();
+    </script>
+  <script type="module">
+
+
+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+    
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHlybIjGRmBdr_DPZZ3o0uVkHDQwA7Zp8",
+            authDomain: "cv-bot-495f8.firebaseapp.com",
+            projectId: "cv-bot-495f8",
+            storageBucket: "cv-bot-495f8.appspot.com",
+            messagingSenderId: "210805657683",
+            appId: "1:210805657683:web:30851513a8a20d1b8436a6"
+        };
+    
+        import {getDatabase, set, get, update, remove, ref, child } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig)
+        const db = getDatabase();
+
+        const encodedIdentity = sessionStorage.getItem('Identity');
+        const IDen = decodeURIComponent(encodedIdentity);
+
+     
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function showAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.classList.add('alert');
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.classList.add('show');
+                setTimeout(() => {
+                    alertDiv.classList.remove('show');
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 500);
+                }, 3000); // Adjust the delay for how long the alert stays visible
+            }, 100); // Adding a slight delay to ensure smooth transition
+        }
+
+var Identity = getParameterByName('Identity');
+
+
+document.addEventListener("DOMContentLoaded", () => {
+        const body = document.querySelector("body"),
+            sidebar = body.querySelector(".sidebar"),
+            toggle = body.querySelector(".toggle"),
+            modeSwitch = body.querySelector(".toggle-switch"),
+            modeText = body.querySelector(".mode-text");
+
+        function setDarkMode(isDarkMode) {
+            body.classList.toggle("dark", isDarkMode);
+            modeText.innerText = isDarkMode ? "Light Mode" : "Dark Mode";
+        }
+
+        function toggleDarkMode() {
+            const isDarkMode = body.classList.contains("dark");
+            localStorage.setItem("darkMode", isDarkMode ? "true" : "false");
+            setDarkMode(isDarkMode);
+        }
+
+        toggle.addEventListener("click", () => {
+            sidebar.classList.toggle("close");
+        });
+
+        modeSwitch.addEventListener("click", () => {
+            body.classList.toggle("dark");
+            if (body.classList.contains("dark")) {
+                modeText.innerText = "Light Mode";
+            } else {
+                modeText.innerText = "Dark Mode";
+            }
+            toggleDarkMode();
+        });
+
+        const darkMode = localStorage.getItem("darkMode");
+        if (darkMode === "true") {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+    });
+
+
+ 
+
+
+
+    const dbRef = ref(db);
+
+
+    get(child(dbRef, "Company/" + encodedIdentity))
+    .then((snapshot) => {
+        if (snapshot.exists()) {
+            // Person exists in the database
+                        
+            const name = snapshot.val().Company_Name.toUpperCase() + " " + snapshot.val().Industry;
+
+            document.getElementById("compNa").innerHTML = name;
+
+                       
+            // Now you can use personData as needed
+        }
+    });
+
+
+
+var countTotal = 0;
+var countUnderReview = 0;
+var countQualified = 0;
+var countRejected = 0;
+
+const applicationsRef = child(dbRef, 'Processed_Applications');
+    // Fetch all applications
+    get(applicationsRef)
+        .then((snapshot) => {
+
+            snapshot.forEach(function(childSnapshot) {
+      var applicationData = childSnapshot.val();
+      if (applicationData.Company_ID === encodedIdentity) {
+        console.log("ID: ", applicationData.ID);
+        console.log("Company ID: ", applicationData.Company_ID);
+        console.log("Surname: ", applicationData.Surname);
+        console.log("Phone: ", applicationData.Phone);
+        console.log("Email: ", applicationData.Email);
+        console.log("Job Title: ", applicationData.Job_Title);
+        console.log("Job Type: ", applicationData.Job_Type);
+        console.log("Score: ", applicationData.Score);
+        console.log("Status: ", applicationData.Status);
+        console.log("----------------------");
+
+        countTotal++;
+
+
+        if(applicationData.Status === "REJECTED")
+        {
+            countRejected++;
+        }
+        else if(applicationData.Status === "PENDING")
+        {
+            countUnderReview++;
+        }
+        else if(applicationData.Status === "ACCEPTED")
+        {
+            countQualified++;
+        }
+      }
+    });
+    console.log("TOTAL " + countTotal);
+    console.log("QUALIFIED " + countQualified);
+    console.log("UNDER REVIEW " + countUnderReview);
+    console.log("REJECTEDTAL " + countRejected);
+
+    document.getElementById("total").innerHTML = countTotal;
+document.getElementById("qualified").innerHTML = countQualified;
+document.getElementById("underReview").innerHTML = countUnderReview;
+document.getElementById("rejected").innerHTML = countRejected;
+
+})
+  .catch(function(error) {
+    console.error("Error fetching data:", error);
+  });
+
+  
+  
+
+
+      
+        </script>
+        
+
+        <script>
+            function generatePDF() {
+                const { jsPDF } = window.jspdf; // Ensure jsPDF is correctly referenced
+                const invoice = document.getElementById('applications-list');
+                
+                // Create a title for the PDF
+                const title = "Job Applications List";
+      
+                html2canvas(invoice)
+                    .then((canvas) => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const pdf = new jsPDF();
+                        const imgProps = pdf.getImageProperties(imgData);
+                        const pdfWidth = pdf.internal.pageSize.getWidth();
+                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      
+                        // Add title to the PDF
+                        pdf.text(title, pdfWidth / 2, 10, { align: 'center' });
+      
+                        // Add image to the PDF
+                        pdf.addImage(imgData, 'PNG', 0, 20, pdfWidth, pdfHeight - 20);
+                        
+                        pdf.save('Your Jobs Applications.pdf');
+                    });
+            }
+        </script>
+
+<script type="module">
+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+    
+        // Your web app's Firebase configuration
+        const firebaseConfigg = {
+            apiKey: "AIzaSyDHlybIjGRmBdr_DPZZ3o0uVkHDQwA7Zp8",
+            authDomain: "cv-bot-495f8.firebaseapp.com",
+            projectId: "cv-bot-495f8",
+            storageBucket: "cv-bot-495f8.appspot.com",
+            messagingSenderId: "210805657683",
+            appId: "1:210805657683:web:30851513a8a20d1b8436a6"
+        };
+    
+        import {getDatabase, set, get, update, remove, ref, child } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+    
+        // Initialize Firebase
+        const appp = initializeApp(firebaseConfigg)
+        const dbb = getDatabase();
+    
+        function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    
+    // Retrieve the Identity parameter value from the URL
+    // Retrieve the Identity parameter value from the URL
+    var Identity = getParameterByName('Identity');
+    if(Identity != null)
+    {
+      sessionStorage.setItem('Identity', Identity);
+    
+    }
+     Identity = sessionStorage.getItem('Identity');
+    console.log("LODGGED " + Identity)
+    console.log("Identity:", Identity); // Output the retrieved Identity value to the console or use it as needed
+    
+    // Select the HTML element where you want to display the name
+    var nameElement = document.querySelector("#yourName");
+    var nameIcon = document.querySelector("#user_iconn");
+    var envelop = document.querySelector("#envelop");
+    var phone = document.querySelector("#phone");
+    var lastname = "";
+    var firstname = "";
+    var email ="";
+    var  phoneNum="";
+    var  personName="";
+    var surname="";
+    console.log("nameElement:", nameElement); // Check if nameElement is selecting the correct HTML element
+    
+    function showLoading() {
+            // Display the loading spinner
+            document.getElementById('loading').style.display = 'block';
+    
+            // Simulate loading for 3 seconds
+            setTimeout(() => {
+                
+            
+            }, 3000);
+        }
+    
+        function hideLoading() {
+        const loadingElement = document.getElementById('loading');
+        if (loadingElement) {
+            loadingElement.style.display = 'none';
+        }
+    }
+    
+    function getStatusColor(status) {
+        switch (status) {
+            case "applied":
+                return "#ffc107"; // Yellow
+            case "pending":
+                return "#17a2b8"; // Cyan
+            case "rejected":
+                return "#dc3545"; // Red
+            case "accepted":
+                return "#28a745"; // Green
+            default:
+                return "gray"; // Default color
+        }
+      }
+    
+    const dbref = ref(dbb);
+    get(child(dbref, "Person/" + Identity))
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                // Person exists in the database
+                            
+                personName = snapshot.val().Name.toUpperCase();
+                surname = snapshot.val().Surname.toUpperCase();
+                email = snapshot.val().Email.toUpperCase();
+                phoneNum = snapshot.val().Phone.toUpperCase();
+               lastname = surname;
+                firstname = personName;
+    
+                console.log("personName:", personName); // Check the value of personName
+                nameElement.innerHTML = personName + " " + surname; // Use the nameElement to set innerHTML
+                nameIcon.innerHTML = personName + " " + surname; // Use the nameElement to set innerHTML
+                envelop.innerHTML = email;
+                phone.innerHTML = phoneNum; // Use the nameElement to set innerHTML
+    
+                
+                // Now you can use personData as needed
+            }
+        });
+    
+        const dbReff = ref(db);
+    
+        
+    
+        var compNames = ""
+        const processRef = child(dbRef, 'Processed_Applications');
+        get(processRef)
+            .then((snapshot) => {
+                console.log(snapshot.exists());
+                console.log(snapshot.hasChildren());
+    
+                if (snapshot.exists()) {
+    
+                  const applicationsList = document.getElementById("applications-list");
+    
+                  snapshot.forEach(childSnapshot => {
+    
+                    if(Identity == childSnapshot.val().ID)
+                    {
+                      const applicationDiv = document.createElement("div");
+                        applicationDiv.classList.add("application");
+    
+                        var ideComp = childSnapshot.val().Company_ID;
+                        var idenCompName = "" 
+    
+                        get(child(dbReff, "Company/" + ideComp))
+                .then((snapshot) => {
+                    const idenCompName = snapshot.val().Company_Name;
+    
+               
+    
+                    // Create company element and append to applicationDiv
+                    const company = document.createElement("p");
+                    company.textContent = `Company name: ${idenCompName}`;
+                    company.classList.add("company");
+                    applicationDiv.appendChild(company);
+    
+                    // Create and append other job details
+                    const position = document.createElement("p");
+                    position.textContent = `Job Title: ${childSnapshot.val().Job_Title}`;
+                    position.classList.add("position");
+                    applicationDiv.appendChild(position);
+    
+                    const date = document.createElement("p");
+                    date.textContent = `Job Type: ${childSnapshot.val().Job_Type}`;
+                    date.classList.add("date");
+                    applicationDiv.appendChild(date);
+    
+                    
+    
+                    const status = document.createElement("p");
+                    status.textContent = childSnapshot.val().Status;
+                    status.classList.add("status", childSnapshot.val().Status); // Add status class dynamically
+                    status.style.backgroundColor = getStatusColor(childSnapshot.val().Status.toLowerCase()); // Set background color dynamically
+                    status.style.padding = "5px 10px";
+                    status.style.borderRadius = "5px";
+                    status.style.display = "inline-block";
+                    status.style.fontSize = "0.9rem";
+                    status.style.color = "white";
+                    applicationDiv.appendChild(status);
+    
+                    // Append applicationDiv to applicationsList
+                    applicationsList.appendChild(applicationDiv);
+    
+    
+                          // Set the report date
+    
+                }) .catch((error) => {
+                    console.error("Error fetching company data:", error);
+                });
+                    }
+                    else{
+    
+                    }
+                          
+    
+                    });
+    
+    
+                }
+    
+    
+            })
+    
+          
+    
+        const slideButton1 = document.getElementById('slideButton1');
+        const content1 = document.querySelector('.jobs-div');
+        const content2 = document.querySelector('.prifile-div');
+    
+        var isContent1Centered1 = false;
+    
+        slideButton1.addEventListener('click', () => {
+          // Toggle the show class on the profile div
+          content2.classList.toggle('show');
+    
+          // Toggle content sliding
+          if (isContent1Centered1) {
+            content1.classList.add('centered');
+            content2.classList.remove('centered');
+          } else {
+            content1.classList.remove('centered');
+            content2.classList.add('centered');
+          }
+    
+          isContent1Centered1 = !isContent1Centered1;
+        });
+        //=================================================
+        const slideButton2 = document.getElementById('slideButton2');
+        const content3 = document.querySelector('.jobs-div');
+        const content4 = document.querySelector('.myJobs-div');
+    
+        var isContent1Centered2 = false;
+    
+        slideButton2.addEventListener('click', () => {
+            
+          if (isContent1Centered2) {
+            content3.classList.add('centered');
+            content4.classList.remove('centered');
+          } else {
+            content3.classList.remove('centered');
+            content4.classList.add('centered');
+          }
+    
+          isContent1Centered2 = !isContent1Centered2;
+        });
+    
+        // JavaScript for sliding the "Reviews" content
+        const slideButton3 = document.getElementById('slideButton3');
+        const content5 = document.querySelector('.jobs-div');
+        const content6 = document.querySelector('.reviews-div');
+    
+        var isContent1Centered3 = false;
+    
+        slideButton3.addEventListener('click', () => {
+            
+          if (isContent1Centered3) {
+            content5.classList.add('centered');
+            content6.classList.remove('centered');
+          } else {
+            content5.classList.remove('centered');
+            content6.classList.add('centered');
+          }
+    
+          isContent1Centered3 = !isContent1Centered3;
+        });
+    
+        const jobContainer = document.querySelector('.job-container');
+    
+        
+        //pfd work
+           // Set the worker source for PDF.js library
+            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+    
+            // Get references to various elements
+            let pdfinput = document.querySelector(".selectpdf"); // Reference to the PDF file input field
+            let upload = document.querySelector(".upload"); // Reference to the upload button
+            let afterupload = document.querySelector(".afterupload"); // Reference to the result section
+            let select = document.querySelector("select"); // Reference to the page selection dropdown
+            let download = document.querySelector(".download"); // Reference to the download link
+            let pdftext = document.querySelector(".pdftext"); // Reference to the text area for displaying extracted text
+            let detailsTextarea = document.querySelector(".details"); // Reference to the textarea for displaying extracted details
+    
+                                // Event listener for the upload button click
+    upload.addEventListener('click', () => {
+        let file = pdfinput.files[0]; // Get the selected PDF file
+        if (file != undefined && file.type == "application/pdf") {
+            let fr = new FileReader(); // Create a new FileReader object
+            fr.readAsDataURL(file); // Read the file as data URL
+            fr.onload = () => {
+                let res = fr.result; // Get the result of file reading
+                extractText(res, false); // Extract text without password
+    
+                // Show the download button
+                document.getElementById('downloadButton').style.display = 'block';
+            }
+        } else {
+            alert("Select a valid PDF file");
+        }
+    });
+    
+    
+    
+    function getJobsData() {
+            const jobsData = [];
+            const jobsRef = ref(db, 'Jobs');
+            
+            return new Promise((resolve, reject) => {
+                get(jobsRef)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            snapshot.forEach((childSnapshot) => {
+                                const jobData = childSnapshot.val();
+                                jobsData.push(jobData);
+                            });
+                            resolve(jobsData);
+                        } else {
+                            // Handle case where no data exists
+                            resolve(jobsData);
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            });
+        }
+    
+        var requirements=""
+        
+        displayJobs()
+    
+        
+        // Function to display job data in the job-container
+        function displayJobs() {
+    
+    
+            getJobsData()
+                .then((jobsData) => {
+                    jobsData.forEach((job) => {
+    
+                       const companyID = job.Company_ID;
+                       requirements = job.Job_Description;
+                     
+    
+                        const box = document.createElement('div');
+                        box.classList.add('box');
+    
+    
+    
+                        const img = document.createElement('img');
+                        img.src = job.Image_URL;
+                        img.classList.add('job-mage');
+    
+    
+                      
+                        const details = document.createElement('div');
+                        details.classList.add('job-details');
+    
+                        const title = document.createElement('h2');
+                        title.style.color = 'grey';
+                        title.align
+                        title.textContent = job.Job_Title;
+                        
+                        const level = document.createElement("h5");
+                        level.textContent = "Qualification: " + job.Education_Level;
+    
+                        
+                        const description = document.createElement('h5');
+                        description.textContent = "Requirements: " + job.Job_Description;
+    
+                        const type = document.createElement('h5');
+                        type.textContent = "Job Type: " + job.Job_Type;
+    
+                        const salary = document.createElement('h5');
+                        salary.textContent = "Salary:(Annual): R" + job.Salary;
+    
+                        const location = document.createElement('h5');
+                        location.textContent = "Location:" + job.Location;
+    
+                        
+    
+                       
+    
+                        const compName = document.createElement('h5');
+                        const industry = document.createElement('h5');
+                        var comp_Id ="";
+                     
+    
+                        get(child(dbref, "Company/" + companyID))
+                        .then((snapshot) => {
+                            if (snapshot.exists()) {
+                                // Person exists in the database
+                                            
+                                const name = snapshot.val().Company_Name;
+                                const ind = snapshot.val().Industry;
+                                comp_Id =  snapshot.val().Company_ID;
+                                
+    
+                               
+                                compName.textContent = "Company Name: " + name;
+                                industry.textContent = "Industry: " + ind;
+                              
+                            }
+                        });
+                       
+                        const applyButtonContainer = document.createElement('h5');
+                    const applyButton = document.createElement('button');
+                    applyButton.textContent = "Apply Job";
+                    applyButton.classList.add('apply-button');
+    
+                    // Apply styling to the button to fit in with the rest of the content
+                    applyButton.style.marginTop = '10px';
+                    applyButton.style.padding = '10px 10px';
+                    applyButton.style.backgroundColor = '#007BFF';
+                    applyButton.style.color = 'white';
+                    applyButton.style.border = 'none';
+                    applyButton.style.borderRadius = '5px';
+                    applyButton.style.cursor = 'pointer';
+    
+                    // Add hover effect for the button
+                    applyButton.addEventListener('mouseover', () => {
+                        applyButton.style.backgroundColor = '#0056b3';
+                    });
+                    applyButton.addEventListener('mouseout', () => {
+                        applyButton.style.backgroundColor = '#007BFF';
+                    });
+    
+                    applyButton.addEventListener('click', () => {
+                        const jobDetails = {
+                            title: title.textContent,
+                            companyName: compName.textContent,
+                            industry: industry.textContent,
+                            description: description.textContent,
+                            type: type.textContent,
+                            salary: salary.textContent,
+                            location: location.textContent
+                            
+                        }
+                        
+                        requirements = job.Job_Description;
+                       
+                        let cleanedString = requirements.replace(/[^\w\s]/g, '');
+    
+                          // Replace multiple spaces with a single space
+                          cleanedString = cleanedString.replace(/\s+/g, ' ');
+    
+                          // Trim leading and trailing spaces
+                          cleanedString = cleanedString.trim();
+                          console.log("NOT CLEANED " +job.Job_Description)   
+    
+                          console.log("CLEANED " + cleanedString);
+                                            
+    
+                            ;
+    
+                       
+                                        
+                        
+    get(child(dbReff, "Applicant_Qualifications/" + (firstname + " " +lastname + " " + Identity)))
+        .then((snapshot) => {
+            if (snapshot.exists()) {   
+                   
+              set(ref(db, "Applications/" + Identity +" "+ (firstname + " " + lastname + " " + title.textContent ) , showLoading()), {
+                            ID: Identity,
+                            Name: personName,
+                            Surname: surname,
+                            Job_Title: title.textContent,
+                            Industry: industry.textContent,
+                            Job_type: type.textContent,
+                            Salary: salary.textContent,
+                            Phone: phoneNum,
+                            Email: email,
+                            Company_ID: companyID,
+                            Requirements: cleanedString,
+                            Applicant_Qualifications: snapshot.val().Qualifications,
+                            
+                           
+             })
+            .then(() => {
+              console.log("COMO " + companyID)
+              
+              hideLoading();
+              console.log("REQUIRE " + requirements);
+    
+                showAlert("Successfully applied for " + title.textContent + " job ");
+               
+            })
+            .catch((error) => {
+                showAlert("Error: " + error);
+            });
+            }
+            else{
+              showAlert("Please go to profile to update your cv before you can apply");
+              slideButton1.click();
+            }
+        });
+    
+               
+                    });
+    
+                    // Append the button to the container
+                    applyButtonContainer.appendChild(applyButton);
+    
+                        details.appendChild(title);
+                        details.appendChild(compName);
+                        details.appendChild(industry);
+                        details.appendChild(level);
+                        details.appendChild(description);
+                        details.appendChild(type);
+                        details.appendChild(salary);
+                        details.appendChild(location);
+                        details.appendChild(applyButtonContainer);
+                        
+                        
+                        box.appendChild(img);
+                        box.appendChild(details);
+                        jobContainer.appendChild(box);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fetching job data:', error);
+                });
+    
+        }
+    
+    
+    
+    
+        
+    
+    
+        // Call the displayJobs function when the page loads
+        //document.addEventListener('DOMContentLoaded', displayJobs);
+    
+    
+    function showAlert(message) {
+                const alertDiv = document.createElement('div');
+                alertDiv.classList.add('alert');
+                alertDiv.textContent = message;
+                document.body.appendChild(alertDiv);
+    
+                setTimeout(() => {
+                    alertDiv.classList.add('show');
+                    setTimeout(() => {
+                        alertDiv.classList.remove('show');
+                        setTimeout(() => {
+                            alertDiv.remove();
+                        }, 500);
+                    }, 3000); // Adjust the delay for how long the alert stays visible
+                }, 100); // Adding a slight delay to ensure smooth transition
+            }
+    
+    
+            // Function to extract text from the PDF
+            async function extractText(url, pass) {
+                try {
+                    let pdf;
+                    if (pass) {
+                        pdf = await pdfjsLib.getDocument({ url: url, password: pwd.value }).promise; // Get the PDF document with password
+                    } else {
+                        pdf = await pdfjsLib.getDocument(url).promise; // Get the PDF document without password
+                    }
+                    let pages = pdf.numPages; // Get the total number of pages in the PDF
+                    let alltext = []; // Array to store all extracted text
+                    for (let i = 1; i <= pages; i++) {
+                        let page = await pdf.getPage(i); // Get the page object for each page
+                        let txt = await page.getTextContent(); // Get the text content of the page
+                        let words = txt.items.map((s) => s.str.toLowerCase().trim()); // Get an array of individual words and convert them to lowercase
+                        let text = words.join(" "); // Join the words with spaces
+                        alltext.push(text); // Add the extracted text to the array
+                    }
+                    let extractedText = alltext.join("\n"); // Join all extracted text with new lines
+                    pdftext.value = extractedText; // Display the extracted text in the textarea
+                    afterupload.style.display = "flex"; // Display the result section
+    
+                    // Extract details like qualifications, skills, education background, and work experience
+                    let qualifications = extractQualifications(extractedText);
+                    let skills = extractSkills(extractedText);
+                    let education = extractEducation(extractedText);
+                    let workExperience = extractWorkExperience(extractedText);
+                    console.log("THE LOOP");
+    
+                    var qualificationDetails="";
+    
+                    for (let i = 0; i < qualifications.length; i++) {
+        // Access each qualification using qualifications[i]
+        
+                
+                 qualificationDetails+=  qualifications[i] + " ";
+    
+                }
+    
+                
+                for (let x = 0; x < skills.length; x++) {
+        // Access each qualification using qualifications[i]
+        
+                
+                 qualificationDetails+=  skills[x] + " ";
+    
+                }
+    
+                for (let f = 0; f < education.length; f++) {
+        // Access each qualification using qualifications[i]
+        
+                
+                 qualificationDetails+=  education[f] + " ";
+    
+                }
+                    
+                for (let g = 0; g < workExperience.length; g++) {
+        // Access each qualification using qualifications[i]
+        
+                
+                 qualificationDetails+=  workExperience[g] + " ";
+                 console.log(qualificationDetails)
+    
+                }
+                    
+    
+                    // Combine all details into a single string
+                    let details = qualifications.join("\n") + "\n" +
+                                  skills.join("\n") + "\n" +
+                                  education.join("\n") + "\n" +
+                                  workExperience.join("\n");
+    
+                                  console.log(details);
+    
+                    set(ref(db, "Applicant_Qualifications/" + (firstname + " " +lastname + " " + Identity)), {
+                    ID: Identity,
+                    Qualifications: qualificationDetails
+                    
+                })
+                    .then(() => {
+                        showAlert("Your Cv information is stored into our database");
+                        !slideButton1.click();
+                        
+                    })
+                    .catch((error) => {
+                        showAlert("Error: " + error);
+                    });
+            
+                    // Create a Blob containing the details data
+                    let detailsBlob = new Blob([details], { type: 'text/plain' });
+    
+                    // Set the download link href and make it visible
+                    download.href = URL.createObjectURL(detailsBlob);
+                    download.style.display = "block";
+    
+                    // Display the extracted details in the textarea
+                    detailsTextarea.value = details;
+                } catch (err) {
+                    alert(err.message);
+                }
+            }
+    
+            // Function to extract qualifications from CV text
+            function extractQualifications(cvText) {
+                // Define keywords and patterns indicating qualifications
+                const qualificationKeywords = ["education", "degree", "qualification", "certification", "training"];
+                const qualificationPatterns = [
+                    /\b((?:Bachelor|Master|Ph\.?D)\.?\s*(?:of\s*Science|of\s*Arts|in\s*Business Administration|in\s*Computer Science|in\s*Engineering))\b/gi,
+                    /\b((?:Bachelor|Master|Ph\.?D)\.?\s*(?:Degree))\b/gi,
+                    /\b((?:Bachelor|Master|Ph\.?D)\.?\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi,
+                    /\b(Certified\s*(?:Professional|Specialist|Associate)\b\s*(?:in|for)\s*[A-Za-z\s]+)\b/gi,
+                    /\b(Diploma\s*(?:in|of)\s*[A-Za-z]+)\b/gi,
+                    /\b((?:Associate|Bachelor|Master|Ph\.?D)\.?\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi,
+                    /\b(Degree\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi,
+                    /\b(Graduate\s*(?:Certificate|Diploma))\b/gi,
+                    /\b(Training\s*(?:in|on|for)\s*[A-Za-z\s]+)\b/gi
+                ];
+    
+                // Initialize an array to store extracted qualifications
+                let qualifications = [];
+    
+                // Search for qualifications using keywords and patterns
+                qualificationKeywords.forEach(keyword => {
+                    let regex = new RegExp(keyword, "gi");
+                    let matches = cvText.match(regex);
+                    if (matches) {
+                        matches.forEach(match => {
+                            qualifications.push(match);
+                        });
+                    }
+                });
+    
+                qualificationPatterns.forEach(pattern => {
+                    let matches = cvText.match(pattern);
+                    if (matches) {
+                        matches.forEach(match => {
+                            qualifications.push(match);
+                        });
+                    }
+                });
+    
+                // Remove duplicate qualifications
+                qualifications = [...new Set(qualifications)];
+    
+                return qualifications;
+            }
+    
+            // Function to extract skills from CV text
+            function extractSkills(cvText) {
+                // Define keywords and patterns indicating skills
+                const skillKeywords = [
+                    "skills",
+                    "proficiencies",
+                    "competencies",
+                    "programming",
+                    "languages",
+                    "frameworks",
+                    "tools",
+                    "technologies",
+                    "communication",
+                    "leadership",
+                    "project management",
+                    "problem-solving",
+                    "teamwork",
+                    "creativity",
+                    "critical thinking",
+                    "analytical skills",
+                    "time management",
+                    "adaptability",
+                    "attention to detail",
+                    "organizational skills",
+                    "negotiation",
+                    "decision making",
+                    "emotional intelligence",
+                    "interpersonal skills",
+                    "public speaking",
+                    "writing skills",
+                    "presentation skills",
+                    "research skills",
+                    "customer service",
+                    "sales skills",
+                    "marketing skills",
+                    "financial skills",
+                    "budgeting",
+                    "forecasting",
+                    "data analysis",
+                    "data visualization",
+                    "data management",
+                    "statistics",
+                    "machine learning",
+                    "artificial intelligence",
+                    "deep learning",
+                    "computer vision",
+                    "natural language processing",
+                    "big data",
+                    "cloud computing",
+                    "cybersecurity",
+                    "networking",
+                    "database management",
+                    "web development",
+                    "mobile app development",
+                    "UI/UX design",
+                    "graphic design",
+                    "video editing",
+                    "audio editing",
+                    "photography",
+                    "animation",
+                    "game development",
+                    "3D modeling",
+                    "virtual reality",
+                    "augmented reality",
+                    "blockchain",
+                    "robotics",
+                    "Internet of Things (IoT)",
+                    "automation",
+                    "bioinformatics",
+                    "nanotechnology",
+                    "environmental science",
+                    "sustainability",
+                    "healthcare",
+                    "medicine",
+                    "pharmaceuticals",
+                    "biotechnology",
+                    "agriculture",
+                    "forestry",
+                    "geology",
+                    "archaeology",
+                    "history",
+                    "anthropology",
+                    "psychology",
+                    "sociology",
+                    "linguistics",
+                    "education",
+                    "literature",
+                    "art",
+                    "music",
+                    "film",
+                    "theater",
+                    "dance",
+                    "sports",
+                    "cooking",
+                    "baking",
+                    "gardening",
+                    "DIY",
+                    "fashion",
+                    "beauty",
+                    "travel",
+                    "languages",
+                    "cultural awareness",
+                    // Additional keywords for specific fields
+                    "ICT",
+                    "Humanities",
+                    "Law",
+                    "Health",
+                    "Engineering",
+                    "Science"
+                ];
+    
+                const skillPatterns = [
+                    /\b(JavaScript|Java|Python|HTML|CSS|React|Node\.js|SQL|C\+\+|C#|Ruby|PHP|Swift|Objective\-C|Git)\b/gi,
+                    /\b(Agile|Scrum|Kanban|Waterfall|Project Management|Leadership|Communication)\b/gi,
+                    /\b(Data Analysis|Machine Learning|Artificial Intelligence|Deep Learning|Computer Vision)\b/gi,
+                    // Additional patterns for specific fields
+                    /\b(Network Security|Cryptography|Penetration Testing)\b/gi, // ICT
+                    /\b(History|Philosophy|Literature|Art History)\b/gi, // Humanities
+                    /\b(Law|Legal Research|Legal Writing|Civil Law|Criminal Law)\b/gi, // Law
+                    /\b(Public Health|Epidemiology|Health Policy|Health Informatics|Medical Terminology)\b/gi, // Health
+                    /\b(Mechanical Engineering|Electrical Engineering|Civil Engineering|Chemical Engineering|Aerospace Engineering)\b/gi, // Engineering
+                    /\b(Physics|Chemistry|Biology|Mathematics|Environmental Science)\b/gi // Science
+                ];
+    
+                // Initialize an array to store extracted skills
+                let skills = [];
+    
+                // Search for skills using keywords and patterns
+                skillKeywords.forEach(keyword => {
+                    let regex = new RegExp(keyword, "gi");
+                    let matches = cvText.match(regex);
+                    if (matches) {
+                        matches.forEach(match => {
+                            skills.push(match);
+                        });
+                    }
+                });
+    
+                skillPatterns.forEach(pattern => {
+                    let matches = cvText.match(pattern);
+                    if (matches) {
+                        matches.forEach(match => {
+                            skills.push(match);
+                        });
+                    }
+                });
+    
+                // Remove duplicate skills
+                skills = [...new Set(skills)];
+    
+                return skills;
+            }
+    
+            // Function to extract education background from CV text
+            function extractEducation(cvText) {
+                // Define keywords and patterns indicating education background
+                const educationKeywords = ["degree", "university", "college", "school", "diploma", "certification"];
+                const educationPatterns = [
+                    /\b((?:Bachelor|Master|Ph\.?D)\.?\s*(?:of\s*Science|of\s*Arts|in\s*Business Administration|in\s*Computer Science|in\s*Engineering))\b/gi,
+                    /\b((?:Bachelor|Master|Ph\.?D)\.?\s*(?:Degree))\b/gi,
+                    /\b((?:Bachelor|Master|Ph\.?D)\.?\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi,
+                    /\b(Diploma\s*(?:in|of)\s*[A-Za-z]+)\b/gi,
+                    /\b(Graduate\s*(?:Certificate|Diploma))\b/gi,
+                    /\b(Training\s*(?:in|on|for)\s*[A-Za-z\s]+)\b/gi,
+                    // Additional keywords and patterns for specific fields
+                    /\b(Major\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi, // General
+                    /\b(Minor\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi, // General
+                    /\b(Focus\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi, // General
+                    /\b(Concentration\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi, // General
+                    /\b(Specialization\s*(?:in|of|from|with)\s*[A-Za-z]+)\b/gi // General
+                ];
+    
+                // Initialize an array to store extracted education background
+                let education = [];
+    
+                // Search for education background using keywords and patterns
+                educationKeywords.forEach(keyword => {
+                    let regex = new RegExp(keyword, "gi");
+                    let matches = cvText.match(regex);
+                    if (matches) {
+                        matches.forEach(match => {
+                            education.push(match);
+                        });
+                    }
+                });
+    
+                educationPatterns.forEach(pattern => {
+                    let matches = cvText.match(pattern);
+                    if (matches) {
+                        matches.forEach(match => {
+                            education.push(match);
+                        });
+                    }
+                });
+    
+                // Remove duplicate education background
+                education = [...new Set(education)];
+    
+                return education;
+            }
+    
+            // Function to extract work experience from CV text
+            function extractWorkExperience(cvText) {
+                // Define keywords and patterns indicating work experience
+                const experienceKeywords = ["experience", "employment", "position", "job", "career"];
+                const experiencePatterns = [
+                    /\b((?:Software|Web|Front\-End|Back\-End)\s*Developer)\b/gi,
+                    /\b((?:Software|Web|Front\-End|Back\-End)\s*Engineer)\b/gi,
+                    /\b((?:Full\-Stack)\s*Developer)\b/gi,
+                    /\b((?:Full\-Stack)\s*Engineer)\b/gi,
+                    /\b((?:Data|Business|Systems)\s*Analyst)\b/gi,
+                    /\b((?:Data|Business|Systems)\s*Scientist)\b/gi,
+                    /\b((?:Product|Project)\s*Manager)\b/gi,
+                    /\b((?:Quality|QA)\s*Engineer)\b/gi,
+                    /\b((?:UX|UI)\s*Designer)\b/gi,
+                    /\b(Network\s*Administrator)\b/gi,
+                    /\b(Database\s*Administrator)\b/gi,
+                    /\b(System\s*Administrator)\b/gi,
+                    // Additional keywords and patterns for specific fields
+                    /\b(Research\s*Assistant)\b/gi, // General
+                    /\b(Teacher|Educator|Instructor|Professor|Lecturer)\b/gi, // General
+                    /\b(Nurse|Physician|Doctor|Surgeon|Therapist)\b/gi, // Healthcare
+                    /\b(Lawyer|Attorney|Legal\s*Assistant|Paralegal|Legal\s*Secretary)\b/gi, // Law
+                    /\b(Engineer|Technician|Mechanic|Electrician|Plumber)\b/gi // Engineering
+                ];
+    
+                // Initialize an array to store extracted work experience
+                let workExperience = [];
+    
+                // Search for work experience using keywords and patterns
+                experienceKeywords.forEach(keyword => {
+                    let regex = new RegExp(keyword, "gi");
+                    let matches = cvText.match(regex);
+                    if (matches) {
+                        matches.forEach(match => {
+                            workExperience.push(match);
+                        });
+                    }
+                });
+    
+                experiencePatterns.forEach(pattern => {
+                    let matches = cvText.match(pattern);
+                    if (matches) {
+                        matches.forEach(match => {
+                            workExperience.push(match);
+                        });
+                    }
+                });
+    
+                // Remove duplicate work experience
+                workExperience = [...new Set(workExperience)];
+    
+                return workExperience;
+            }
+    
+            // Function to execute after the PDF is processed
+            function afterProcess() {
+                // Get the selected page number
+                let page = select.options[select.selectedIndex].value;
+                // Scroll the textarea to the selected page
+                pdftext.scrollTop = pdftext.scrollHeight / select.length * (page - 1);
+            }
+      </script>
+
+
+    </body>
+</html>
